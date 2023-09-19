@@ -42,6 +42,7 @@ if(user){
         name: user.name,
         email: user.email,
         role: user.role,
+        password: hashedPassword,
         token: generateToken(user._id)
     })
 } else{

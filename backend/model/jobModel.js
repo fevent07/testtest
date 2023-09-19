@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const goalSchema = mongoose.Schema({
+const jobSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         require: true,
@@ -21,7 +21,7 @@ const goalSchema = mongoose.Schema({
 }, {
     timestampls: true, 
 }) 
-module.exports= mongoose.model('Goal', goalSchema)
+module.exports= mongoose.model('Job', jobSchema)
 
 
 // const jobSchema = new mongoose.Schema({

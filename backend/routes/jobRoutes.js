@@ -1,15 +1,15 @@
 const express = require ('express')
 const router = express.Router()
-const { getGoals, getGoal, setGoals, updateGoals,deleteGoals } = require ('../controllers/goalController')
+const { getJobs, getJob, setJobs, updateJobs,deleteJobs } = require ('../controllers/jobController')
 
 // router.get('/', getGoals)
 // router.post('/', setGoals)
 
 const {protect} = require('../middleware/authMiddleware')
  
-router.route('/').get(getGoals).post(protect, setGoals)
+router.route('/').get(getJobs).post(protect, setJobs)
 
-router.route('/:id').get(getGoal).put(protect, updateGoals).delete(protect, deleteGoals)
+router.route('/:id').get(getJob).put(protect, updateJobs).delete(protect, deleteJobs)
 
 // router.put('/:id', updateGoals)
 // router.delete('/:id', deleteGoals)

@@ -11,13 +11,13 @@
 //   };
 
 
-  const sendResponse = (res, totalJobs, currentPage, goals) => {
-    const goalsCount = goals.length;
+  const sendResponse = (res, totalJobs, currentPage, jobs) => {
+    const jobsCount = jobs.length;
     res.status(200).json({
       totalJobs,
       currentPage,
-      goalsCount,
-      goals
+      jobsCount,
+      jobs
     });
   };
   

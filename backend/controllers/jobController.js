@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const mongoose = require('mongoose');
 
-const Goal = require ('../model/goalModel')
+const Job = require ('../model/jobModel')
 const { sendResponse } = require ('./responseHandler')
 // const jobValidation = require('./validation')
 // const jobUpdateValidation = require('./validation')
@@ -45,7 +45,7 @@ const { jobValidation, jobUpdateValidation } = require('./validation');
 // });
 
 
-const getGoals = asyncHandler(async (req, res) => {
+const getJobs = asyncHandler(async (req, res) => {
   const currentPage = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.limit) || 10;
   const skip = (currentPage - 1) * perPage;
@@ -100,14 +100,14 @@ const getGoals = asyncHandler(async (req, res) => {
   if (req.query.featured) {
     filters.featured = req.query.featured;
   }
-  const totalJobs = await Goal.countDocuments(filters);
-  const goals = await Goal.find(filters)
+  const totalJobs = await Job.countDocuments(filters);
+  const jobs = await Job.find(filters)
     .skip(skip)
     .limit(perPage)
     .sort(sortOptions)
     .collation({ locale: 'en', strength: 2 })
-    .then(goals => {
-            sendResponse(res, totalJobs, currentPage, goals);
+    .then(jobs => {
+            sendResponse(res, totalJobs, currentPage, jobs);
           })
           .catch(error => res.status(500).send(error.message));
 
@@ -148,15 +148,15 @@ const getGoals = asyncHandler(async (req, res) => {
  
    
 // const getGoal = asyncHandler(async (req, res) => {
-//   const goalId = req.params.id;
+//   const jobId = req.params.id;
 
-//   if (!isValidObjectId(goalId)) {
+//   if (!isValidObjectId(jobId)) {
 //     res.status(400);
 //     throw new Error('Invalid goal ID');
 //   }
 
 //   try {
-//     const goal = await Goal.findById(goalId);
+//     const goal = await Goal.findById(jobId);
 
 //     if (!goal) {
 //       res.status(404);
@@ -174,25 +174,25 @@ const getGoals = asyncHandler(async (req, res) => {
 //     throw error;
 //   }
 // });
-const getGoal =asyncHandler (async (req,res) =>{
-  const goalId = req.params.id;
+const getJob =asyncHandler (async (req,res) =>{
+  const jobId = req.params.id;
 
-  if (!mongoose.Types.ObjectId.isValid(goalId)) {
+  if (!mongoose.Types.ObjectId.isValid(jobId)) {
     res.status(400);
-    throw new Error('Invalid goal ID');
+    throw new Error('Invalid Job ID');
   }  
-  const goal = await Goal.findById(req.params.id)
-    if(!goal){
+  const job = await Job.findById(req.params.id)
+    if(!job){
         res.status(400)
-        throw new Error('Goal not found')
+        throw new Error('Job not found')
         
       }
       // const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {new:true,})
       
   
-    const totalJobs = await Goal.countDocuments();
+    const totalJobs = await Job.countDocuments();
     const currentPage = parseInt(req.query.page) || 1;
-      sendResponse(res, totalJobs, currentPage, goal);
+      sendResponse(res, totalJobs, currentPage, job);
     // res.status(200).json(goal)
     // res.status(200).json({message: `update goals ${req.params.id}`})
 })
@@ -220,7 +220,7 @@ const getGoal =asyncHandler (async (req,res) =>{
 //     // res.status(200).json({message: 'set goals'})
 // })
 
-const setGoals = asyncHandler ( async (req,res)=> {
+const setJobs = asyncHandler ( async (req,res)=> {
 // app.post('/newjobs', (req, res) => {
     console.log('Received POST request to create a job listing');
     console.log('Request body:', req.body); // Log the request body to see what's being sent
@@ -233,7 +233,7 @@ const setGoals = asyncHandler ( async (req,res)=> {
   
     console.log('Creating a new job listing:', req.body);
   
-    const jobListing = new Goal(req.body);
+    const jobListing = new Job(req.body);
     jobListing.save()
       .then(() => {
         console.log('Job listing created successfully');
@@ -259,25 +259,25 @@ const setGoals = asyncHandler ( async (req,res)=> {
 //     // res.status(200).json({message: `update goals ${req.params.id}`})
 // })
 
-const updateGoals = asyncHandler (async (req,res)=> {
+const updateJobs = asyncHandler (async (req,res)=> {
 
 // app.put('/jobs/:id', (req, res) => {
     const { error } = jobUpdateValidation.validate(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-    const goalId = req.params.id;
+    const jobId = req.params.id;
 
-    if (!mongoose.Types.ObjectId.isValid(goalId)) {
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
       res.status(400);
-      throw new Error('Invalid goal ID');
+      throw new Error('Invalid job ID');
     }  
-    const goal = await Goal.findById(req.params.id)
-        if(!goal){
+    const job = await Job.findById(req.params.id)
+        if(!job){
             res.status(400)
-            throw new Error('Goal not found')
+            throw new Error('Job not found')
         }
-         await Goal.findByIdAndUpdate(req.params.id, req.body, {new:true,})
+         await Job.findByIdAndUpdate(req.params.id, req.body, {new:true,})
         // res.status(200).json(updatedGoal)
         res.status(200).json({message: `update Job ${req.params.id}`})
   });
@@ -287,18 +287,18 @@ const updateGoals = asyncHandler (async (req,res)=> {
 //@delete goals
 //@route DELETE /api/goals
 //@access PRivate
-const deleteGoals = asyncHandler (async (req,res)=> {
-  const goalId = req.params.id;
+const deleteJobs = asyncHandler (async (req,res)=> {
+  const jobId = req.params.id;
 
- if (!mongoose.Types.ObjectId.isValid(goalId)) {
+ if (!mongoose.Types.ObjectId.isValid(jobId)) {
    res.status(400);
-   throw new Error('Invalid goal ID');
+   throw new Error('Invalid job ID');
  }  
-    const goal = await Goal.findByIdAndRemove(req.params.id)
+    const job = await Job.findByIdAndRemove(req.params.id)
     
-    if(!goal){
+    if(!job){
         res.status(400)
-        throw new Error('Goal not found')
+        throw new Error('Job not found')
     }
     // await goal.remove()
     res.status(200).json({message: `delete job ${req.params.id}`})
@@ -317,9 +317,9 @@ const deleteGoals = asyncHandler (async (req,res)=> {
 
 
 module.exports ={
-    getGoals,
-    getGoal,
-    setGoals,
-    updateGoals,
-    deleteGoals
+    getJobs,
+    getJob,
+    setJobs,
+    updateJobs,
+    deleteJobs
 }
